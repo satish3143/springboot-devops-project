@@ -2,30 +2,40 @@ name: Spring Boot CI/CD
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: springboot-api
+
     steps:
-      - name: Checkout code
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up JDK
+      - name: Show Directory
+        run: |
+          pwd
+          ls -R
+
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
+          distribution: temurin
           java-version: '21'
-          distribution: 'temurin'
 
-      - name: Build with Maven
+      - name: Build Maven Project
         run: mvn clean package -DskipTests
 
-      - name: Login to Docker Hub
+      - name: Login DockerHub
         run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
       - name: Build Docker Image
-        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/springboot-api:v1 .
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/springboot-api:latest .
 
       - name: Push Docker Image
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/springboot-api:v1
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/springboot-api:latest
