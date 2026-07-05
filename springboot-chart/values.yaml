@@ -2,7 +2,7 @@ replicaCount: 2
 
 image:
   repository: s7edgedocker/springboot-api
-  tag: v1
+  tag: v3
   pullPolicy: Always
 
 service:

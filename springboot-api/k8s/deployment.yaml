@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: springboot-api
-          image: s7edgedocker/springboot-api:v1
+          image: s7edgedocker/springboot-api:v3
           ports:
             - containerPort: 8080
